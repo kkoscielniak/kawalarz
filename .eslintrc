@@ -1,0 +1,12 @@
+{
+  "root": true,
+  "extends": [
+    "brainhub"
+  ],
+  "rules": {
+    "no-invalid-this": 0
+  },
+  "env": {
+    "jest": true
+  }
+}
