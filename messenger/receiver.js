@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const delay = require('delay');
+
 const sender = require('./sender');
+const jokesController = require('../api/controller/jokesController');
 
 router.get('/', (req, res) => {
   res.send('Hello world, I am a chat bot');
@@ -24,8 +26,15 @@ router.post('/webhook', (req, res) => {
       const text = event.message.text;
 
       console.log('Message received: ', text);
+
       sender.sendTypingIndicator(senderId);
-      delay(1000).then(() => sender.sendTextMessage(senderId, `Text received: ${text}`));
+      delay(1000).then(
+        () => {
+          const joke = jokesController.getRandomJoke();
+          sender.sendTextMessage(senderId, joke.question);
+          sender.sendGenericMessage(senderId);
+        }
+      );
     }
   }
 
