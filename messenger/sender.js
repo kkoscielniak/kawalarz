@@ -1,16 +1,25 @@
 const request = require('request');
+const delay = require('delay');
 
 const config = require('../config/config');
 const constants = require('../config/constants');
 const logger = require('../services/logger');
 
-const sendTypingIndicator = id => {
-  request({
-    method: 'POST',
-    url: constants.FACEBOOK_GRAPH_URL,
-    qs: {
-      access_token: config.accessToken,
-    },
+const requestParams = {
+  method: 'POST',
+  url: constants.FACEBOOK_GRAPH_URL,
+  qs: {
+    access_token: config.accessToken,
+  },
+};
+
+/**
+ * Sends a typing indicator 💬
+ * @param {string} id recipients ID
+ */
+const sendTypingIndicator = async id => {
+  await request({
+    ...requestParams,
     json: {
       recipient: {
         id,
@@ -25,13 +34,11 @@ const sendTypingIndicator = id => {
  * @param {string} id recipients ID
  * @param {string} text message to be sent
  */
-const sendTextMessage = (id, text) => {
+const sendTextMessage = async(id, text) => {
+  await delay(text.length * 100);
+
   request({
-    method: 'POST',
-    url: constants.FACEBOOK_GRAPH_URL,
-    qs: {
-      access_token: config.accessToken,
-    },
+    ...requestParams,
     json: {
       recipient: {
         id,
@@ -45,55 +52,58 @@ const sendTextMessage = (id, text) => {
     if (err) {
       logger.info(err);
     } else if (res.body.error) {
-      logger.info(res.body.err);
+      logger.info(res.body.error);
+    }
+  });
+};
+
+/**
+ * Sends a card asking for feedback about the joke
+ * @param {string} id recipients ID
+ */
+const askAboutFeedback = async id => {
+  await delay(750);
+
+  const message = {
+    attachment: {
+      type: 'template',
+      payload: {
+        template_type: 'generic',
+        elements: [{
+          title: 'Podoba Ci się?',
+          buttons: [{
+            type: 'postback',
+            title: 'Dobre :)',
+            payload: constants.FEEDBACK.GOOD,
+          }, {
+            type: 'postback',
+            title: 'Słabe :(',
+            payload: constants.FEEDBACK.BAD,
+          }],
+        }],
+      },
+    },
+  };
+
+  request({
+    ...requestParams,
+    json: {
+      recipient: {
+        id,
+      },
+      message,
+    },
+  }, (err, res) => {
+    if (err) {
+      logger.info(err);
+    } else if (res.body.error) {
+      logger.info(res.body.error);
     }
   });
 };
 
 module.exports.sendTypingIndicator = sendTypingIndicator;
 module.exports.sendTextMessage = sendTextMessage;
+module.exports.askAboutFeedback = askAboutFeedback;
 
 
-function sendGenericMessage(id) {
-  console.log(id);
-  const messageData = {
-    attachment: {
-      type: 'template',
-      payload: {
-        template_type: 'generic',
-        elements: [{
-          title: 'Dobre? ',
-          subtitle: 'Element #1 of an hscroll',
-          buttons: [{
-            type: 'postback',
-            title: 'Słabe',
-            payload: 'asdf',
-          }, {
-            type: 'postback',
-            title: 'Słabe',
-            payload: 'zxcv',
-          }],
-        }],
-      },
-    },
-  };
-  request({
-    url: constants.FACEBOOK_GRAPH_URL,
-    qs: {
-      access_token: config.accessToken,
-    },
-    method: 'POST',
-    json: {
-      recipient: { id },
-      message: messageData,
-    },
-  }, function(err, res) {
-    if (err) {
-      console.log('Error sending messages: ', err);
-    } else if (res.body.error) {
-      console.log('Error: ', res.body.error);
-    }
-  });
-}
-
-module.exports.sendGenericMessage = sendGenericMessage;

@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const delay = require('delay');
 
 const sender = require('./sender');
 const jokesController = require('../api/controller/jokesController');
@@ -15,7 +14,7 @@ router.get('/webhook', (req, res) => {
   res.send('Error, wrong token');
 });
 
-router.post('/webhook', (req, res) => {
+router.post('/webhook', async(req, res) => {
   const messagingEvents = req.body.entry[0].messaging;
 
   for (let i = 0; i < messagingEvents.length; i++) {
@@ -23,18 +22,20 @@ router.post('/webhook', (req, res) => {
     const senderId = event.sender.id;
 
     if (event.message && event.message.text) {
-      const text = event.message.text;
+      sender.sendTypingIndicator(senderId);
 
-      console.log('Message received: ', text);
+      const joke = jokesController.getRandomJoke();
+
+      await sender.sendTextMessage(senderId, joke.question);
 
       sender.sendTypingIndicator(senderId);
-      delay(1000).then(
-        () => {
-          const joke = jokesController.getRandomJoke();
-          sender.sendTextMessage(senderId, joke.question);
-          sender.sendGenericMessage(senderId);
-        }
-      );
+
+      await sender.sendTextMessage(senderId, joke.answer);
+      await sender.askAboutFeedback(senderId);
+    } else if (event.postback) {
+      const text = JSON.stringify(event.postback);
+      sender.sendTextMessage(senderId, `Postback received: ${text.substring(0, 200)}`);
+      console.log(event.postback);
     }
   }
 
