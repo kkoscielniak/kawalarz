@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const receiver = require('./messenger/receiver');
-const jokesRouter = require('./api/routes//jokesRouter');
+const jokesRouter = require('./app/routes//jokesRouter');
 
 const app = express();
 

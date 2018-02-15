@@ -1,7 +1,12 @@
 module.exports = {
   FACEBOOK_GRAPH_URL: 'https://graph.facebook.com/v2.6/me/messages',
   FEEDBACK: {
-    GOOD: 'good',
     BAD: 'bad',
+    GOOD: 'good',
+    NEXT: 'next',
+    STOP: 'stop',
+  },
+  MESSENGER_ACTIONS: {
+    TYPING_ON: 'typing_on',
   },
 };

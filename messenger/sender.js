@@ -24,7 +24,7 @@ const sendTypingIndicator = async id => {
       recipient: {
         id,
       },
-      sender_action: 'typing_on',
+      sender_action: constants.MESSENGER_ACTIONS.TYPING_ON,
     },
   });
 };
@@ -106,4 +106,52 @@ module.exports.sendTypingIndicator = sendTypingIndicator;
 module.exports.sendTextMessage = sendTextMessage;
 module.exports.askAboutFeedback = askAboutFeedback;
 
+/**
+ * Sends a card asking if the user wants to read new joke
+ * @param {string} id recipients ID
+ */
+const askAboutNewJoke = async id => {
+  await delay(750);
 
+  const message = {
+    attachment: {
+      type: 'template',
+      payload: {
+        template_type: 'generic',
+        elements: [{
+          title: 'Chcesz więcej?',
+          buttons: [{
+            type: 'postback',
+            title: 'Jasne! :)',
+            payload: constants.FEEDBACK.NEXT,
+          }, {
+            type: 'postback',
+            title: 'Nie, dzięki.',
+            payload: constants.FEEDBACK.STOP,
+          }],
+        }],
+      },
+    },
+  };
+
+  request({
+    ...requestParams,
+    json: {
+      recipient: {
+        id,
+      },
+      message,
+    },
+  }, (err, res) => {
+    if (err) {
+      logger.info(err);
+    } else if (res.body.error) {
+      logger.info(res.body.error);
+    }
+  });
+};
+
+module.exports.sendTypingIndicator = sendTypingIndicator;
+module.exports.sendTextMessage = sendTextMessage;
+module.exports.askAboutFeedback = askAboutFeedback;
+module.exports.askAboutNewJoke = askAboutNewJoke;

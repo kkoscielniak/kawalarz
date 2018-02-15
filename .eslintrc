@@ -5,6 +5,7 @@
   ],
   "rules": {
     "babel/new-cap": 0,
+    "default-case": 0,
     "camelcase": 0,
     "no-console": 0,
     "no-invalid-this": 0

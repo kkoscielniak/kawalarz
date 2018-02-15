@@ -1,7 +1,18 @@
 const router = require('express').Router();
 
+const constants = require('../config/constants');
 const sender = require('./sender');
-const jokesController = require('../api/controller/jokesController');
+const jokesController = require('../app/controller/jokesController');
+
+const sendAJoke = async senderId => {
+  const joke = jokesController.getRandomJoke();
+
+  sender.sendTypingIndicator(senderId);
+  await sender.sendTextMessage(senderId, joke.question);
+  sender.sendTypingIndicator(senderId);
+  await sender.sendTextMessage(senderId, joke.answer);
+  await sender.askAboutFeedback(senderId);
+};
 
 router.get('/', (req, res) => {
   res.send('Hello world, I am a chat bot');
@@ -22,20 +33,22 @@ router.post('/webhook', async(req, res) => {
     const senderId = event.sender.id;
 
     if (event.message && event.message.text) {
-      sender.sendTypingIndicator(senderId);
-
-      const joke = jokesController.getRandomJoke();
-
-      await sender.sendTextMessage(senderId, joke.question);
-
-      sender.sendTypingIndicator(senderId);
-
-      await sender.sendTextMessage(senderId, joke.answer);
-      await sender.askAboutFeedback(senderId);
-    } else if (event.postback) {
-      const text = JSON.stringify(event.postback);
-      sender.sendTextMessage(senderId, `Postback received: ${text.substring(0, 200)}`);
-      console.log(event.postback);
+      sendAJoke(senderId);
+    } else if (event.postback && event.postback.payload) {
+      switch (event.postback.payload) {
+        case constants.FEEDBACK.GOOD:
+          await sender.askAboutNewJoke(senderId);
+          break;
+        case constants.FEEDBACK.BAD:
+          await sender.sendTextMessage(senderId, ':(');
+          break;
+        case constants.FEEDBACK.NEXT:
+          sendAJoke(senderId);
+          break;
+        case constants.FEEDBACK.STOP:
+          await sender.sendTextMessage(senderId, 'Okej :)');
+          break;
+      }
     }
   }
 
