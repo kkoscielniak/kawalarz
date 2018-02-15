@@ -19,7 +19,7 @@ app.get('/webhook', (req, res) => {
   res.send('Error, wrong token');
 });
 
-app.post('/webhook', function(req, res) {
+app.post('/webhook', (req, res) => {
   const messagingEvents = req.body.entry[0].messaging;
 
   for (let i = 0; i < messagingEvents.length; i++) {
@@ -39,5 +39,5 @@ app.post('/webhook', function(req, res) {
 
 
 app.listen(app.get('port'), function() {
-  console.log('running on port', app.get('port'));
+  console.log('Magic happens on port', app.get('port'));
 });

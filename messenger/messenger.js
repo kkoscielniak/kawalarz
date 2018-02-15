@@ -1,17 +1,18 @@
 const request = require('request');
 
 const config = require('../config/config');
+const constants = require('../config/constants');
 const logger = require('../services/logger');
 
 /**
- * Sends a message via Facebook Messenger
+ * Sends a text message via Facebook Messenger
  * @param {string} id recipients ID
  * @param {string} text message to be sent
  */
 const sendTextMessage = (id, text) => {
   request({
     method: 'POST',
-    url: 'https://graph.facebook.com/v2.6/me/messages',
+    url: constants.FACEBOOK_GRAPH_URL,
     qs: {
       access_token: config.accessToken,
     },
