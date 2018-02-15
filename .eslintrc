@@ -5,7 +5,7 @@
   ],
   "rules": {
     "no-invalid-this": 0,
-    "camelcase": 0,
+    "camelcase": 0
   },
   "env": {
     "jest": true
