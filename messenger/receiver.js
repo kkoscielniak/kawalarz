@@ -3,6 +3,7 @@ const router = require('express').Router();
 const constants = require('../config/constants');
 const sender = require('./sender');
 const jokesController = require('../app/controller/jokesController');
+const emojiHelper = require('../app/helpers/emojiHelper');
 
 const sendAJoke = async senderId => {
   const joke = jokesController.getRandomJoke();
@@ -10,7 +11,7 @@ const sendAJoke = async senderId => {
   sender.sendTypingIndicator(senderId);
   await sender.sendTextMessage(senderId, joke.question);
   sender.sendTypingIndicator(senderId);
-  await sender.sendTextMessage(senderId, joke.answer);
+  await sender.sendTextMessage(senderId, `${joke.answer} ${emojiHelper.getHappyEmoji()}`);
   await sender.askAboutFeedback(senderId);
 };
 
@@ -40,13 +41,13 @@ router.post('/webhook', async(req, res) => {
           await sender.askAboutNewJoke(senderId);
           break;
         case constants.FEEDBACK.BAD:
-          await sender.sendTextMessage(senderId, ':(');
+          await sender.sendTextMessage(senderId, emojiHelper.getSadEmoji());
           break;
         case constants.FEEDBACK.NEXT:
           sendAJoke(senderId);
           break;
         case constants.FEEDBACK.STOP:
-          await sender.sendTextMessage(senderId, 'Okej :)');
+          await sender.sendTextMessage(senderId, `Okej ${emojiHelper.getHappyEmoji()}`);
           break;
       }
     }
