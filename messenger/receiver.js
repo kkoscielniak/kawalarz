@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const delay = require('delay');
 const sender = require('./sender');
 
 router.get('/', (req, res) => {
@@ -23,7 +24,8 @@ router.post('/webhook', (req, res) => {
       const text = event.message.text;
 
       console.log('Message received: ', text);
-      sender.sendTextMessage(senderId, `Text received: ${text}`);
+      sender.sendTypingIndicator(senderId);
+      delay(1000).then(() => sender.sendTextMessage(senderId, `Text received: ${text}`));
     }
   }
 

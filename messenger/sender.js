@@ -4,6 +4,22 @@ const config = require('../config/config');
 const constants = require('../config/constants');
 const logger = require('../services/logger');
 
+const sendTypingIndicator = id => {
+  request({
+    method: 'POST',
+    url: constants.FACEBOOK_GRAPH_URL,
+    qs: {
+      access_token: config.accessToken,
+    },
+    json: {
+      recipient: {
+        id,
+      },
+      sender_action: 'typing_on',
+    },
+  });
+};
+
 /**
  * Sends a text message via Facebook Messenger
  * @param {string} id recipients ID
@@ -34,4 +50,5 @@ const sendTextMessage = (id, text) => {
   });
 };
 
+module.exports.sendTypingIndicator = sendTypingIndicator;
 module.exports.sendTextMessage = sendTextMessage;
