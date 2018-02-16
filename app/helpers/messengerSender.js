@@ -4,7 +4,7 @@ const delay = require('delay');
 const config = require('../config/config');
 const constants = require('../config/constants');
 const logger = require('../services/logger');
-const emojiHelper = require('../app/helpers/emojiHelper');
+const emojiHelper = require('../helpers/emojiHelper');
 
 const requestParams = {
   method: 'POST',
@@ -102,10 +102,6 @@ const askAboutFeedback = async id => {
     }
   });
 };
-
-module.exports.sendTypingIndicator = sendTypingIndicator;
-module.exports.sendTextMessage = sendTextMessage;
-module.exports.askAboutFeedback = askAboutFeedback;
 
 /**
  * Sends a card asking if the user wants to read new joke

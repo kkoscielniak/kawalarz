@@ -1,9 +1,9 @@
 const router = require('express').Router();
 
 const constants = require('../config/constants');
-const sender = require('./sender');
-const jokesController = require('../app/controller/jokesController');
-const emojiHelper = require('../app/helpers/emojiHelper');
+const sender = require('../helpers/messengerSender');
+const jokesController = require('../controller/jokesController');
+const emojiHelper = require('../helpers/emojiHelper');
 
 const sendAJoke = async senderId => {
   const joke = jokesController.getRandomJoke();
