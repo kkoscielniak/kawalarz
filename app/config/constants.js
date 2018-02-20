@@ -9,4 +9,13 @@ module.exports = {
   MESSENGER_ACTIONS: {
     TYPING_ON: 'typing_on',
   },
+  INTENTS: {
+    GET_JOKE: 'get_joke',
+    ABOUT_YOU: 'about_jou',
+  },
+  RESPONSES: {
+    DID_NOT_UNDERSTAND: [
+      'Niestety nie rozumiem',
+    ],
+  },
 };

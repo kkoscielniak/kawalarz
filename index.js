@@ -11,6 +11,6 @@ app.use(bodyParser.json());
 
 app.use('/', messengerRoutes);
 
-app.listen(app.get('port'), function() {
+app.listen(app.get('port'), () => {
   console.log('Magic happens on port', app.get('port'));
 });

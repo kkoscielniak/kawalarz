@@ -1691,7 +1691,7 @@ isobject@^3.0.0, isobject@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/isobject/-/isobject-3.0.1.tgz#4e431e92b11a9731636aa1f9c8d1ccbcfdab78df"
 
-isomorphic-fetch@^2.1.1:
+isomorphic-fetch@^2.1.1, isomorphic-fetch@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/isomorphic-fetch/-/isomorphic-fetch-2.2.1.tgz#611ae1acf14f5e81f729507472819fe9733558a9"
   dependencies:
@@ -2023,6 +2023,16 @@ node-pre-gyp@^0.6.39:
     semver "^5.3.0"
     tar "^2.2.1"
     tar-pack "^3.4.0"
+
+node-wit@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/node-wit/-/node-wit-5.0.0.tgz#db7d305579e40e2f67af5e181d653f110e2360d8"
+  dependencies:
+    body-parser "^1.18.2"
+    express "^4.16.2"
+    isomorphic-fetch "^2.2.1"
+    request "^2.83.0"
+    uuid "^3.0.0"
 
 nodemon@^1.14.12:
   version "1.14.12"

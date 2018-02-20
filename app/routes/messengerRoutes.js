@@ -4,6 +4,7 @@ const constants = require('../config/constants');
 const sender = require('../helpers/messengerSender');
 const jokesController = require('../controller/jokesController');
 const emojiHelper = require('../helpers/emojiHelper');
+const aiHelper = require('../helpers/aiHelper');
 
 const sendAJoke = async senderId => {
   const joke = jokesController.getRandomJoke();
@@ -34,7 +35,16 @@ router.post('/webhook', async(req, res) => {
     const senderId = event.sender.id;
 
     if (event.message && event.message.text) {
-      sendAJoke(senderId);
+      const intent = await aiHelper.getIntent(event.message.text);
+
+      switch (intent) {
+        case constants.INTENTS.GET_JOKE:
+          await sendAJoke(senderId);
+          break;
+        default:
+          sender.sendTextMessage(senderId, constants.RESPONSES.DID_NOT_UNDERSTAND[0]);
+          break;
+      }
     } else if (event.postback && event.postback.payload) {
       switch (event.postback.payload) {
         case constants.FEEDBACK.GOOD:
