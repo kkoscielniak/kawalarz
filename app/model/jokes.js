@@ -103,4 +103,28 @@ module.exports = [
     question: 'Co robi siatkarz, gdy ma urodziny?',
     answer: 'Przyjęcie',
   },
+  {
+    question: 'Kiedy jest pora by przejsc na dietę?',
+    answer: 'Kiedy babcia mówi, żebys schudnął',
+  },
+  {
+    question: 'Jaki to jest jesienny bączek?',
+    answer: 'Taki z kasztanami',
+  },
+  {
+    question: 'Słuchaj, nie powiem Ci że jestes gruba',
+    answer: 'Ale babcia byłaby dumna',
+  },
+  {
+    question: 'Jak wyglądają studenckie walentynki?',
+    answer: 'Każdy przychodzi ze swoją połówką',
+  },
+  {
+    question: 'Jakie jest najlepsze danie na walentynki?',
+    answer: 'Danie dupy',
+  },
+  {
+    question: 'Dlaczego prawdziwa miłosc przychodzi ze sklerozą?',
+    answer: 'Bo tylko wtedy można zakochac się bez pamięci',
+  },
 ];
