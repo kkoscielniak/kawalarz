@@ -113,7 +113,7 @@ module.exports = [
   },
   {
     question: 'Słuchaj, nie powiem Ci że jestes gruba',
-    answer: 'Ale babcia byłaby dumna',
+    answer: 'Ale babcia byłaby z Ciebie dumna',
   },
   {
     question: 'Jak wyglądają studenckie walentynki?',
