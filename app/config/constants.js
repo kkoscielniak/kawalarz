@@ -10,6 +10,7 @@ module.exports = {
     TYPING_ON: 'typing_on',
   },
   INTENTS: {
+    GREET: 'greet',
     GET_JOKE: 'get_joke',
     ABOUT_YOU: 'about_jou',
   },

@@ -1,13 +1,23 @@
 const router = require('express').Router();
 
 const constants = require('../config/constants');
+
+const jokes = require('../model/jokes');
+const predefinedMessages = require('../model/predefinedMessages');
+
 const sender = require('../helpers/messengerSender');
-const jokesController = require('../controller/jokesController');
 const emojiHelper = require('../helpers/emojiHelper');
 const aiHelper = require('../helpers/aiHelper');
+const { getRandomMessage } = require('../helpers/messagesHelper');
+
+const sendAGreeting = async senderId => {
+  const greeting = getRandomMessage(predefinedMessages.greetings);
+  sender.sendTypingIndicator(senderId);
+  await sender.sendTextMessage(senderId, greeting);
+};
 
 const sendAJoke = async senderId => {
-  const joke = jokesController.getRandomJoke();
+  const joke = getRandomMessage(jokes);
 
   sender.sendTypingIndicator(senderId);
   await sender.sendTextMessage(senderId, joke.question);
@@ -15,6 +25,11 @@ const sendAJoke = async senderId => {
   await sender.sendTextMessage(senderId, `${joke.answer} ${emojiHelper.getHappyEmoji()}`);
   await sender.askAboutFeedback(senderId);
 };
+
+// const sendAbout = async senderId => {
+//   sender.sendTypingIndicator(senderId);
+//   await sender.sendTextMessage(senderId);
+// }
 
 router.get('/', (req, res) => {
   res.send('Hello world, I am a chat bot');
@@ -38,8 +53,14 @@ router.post('/webhook', async(req, res) => {
       const intent = await aiHelper.getIntent(event.message.text);
 
       switch (intent) {
+        case constants.INTENTS.GREET:
+          await sendAGreeting(senderId);
+          break;
         case constants.INTENTS.GET_JOKE:
           await sendAJoke(senderId);
+          break;
+        case constants.INTENTS.ABOUT_YOU:
+          // @TODO
           break;
         default:
           sender.sendTextMessage(senderId, constants.RESPONSES.DID_NOT_UNDERSTAND[0]);
