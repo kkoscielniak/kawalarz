@@ -12,6 +12,6 @@ module.exports = {
   INTENTS: {
     GREET: 'greet',
     GET_JOKE: 'get_joke',
-    ABOUT_YOU: 'about_jou',
+    ABOUT_YOU: 'about_you',
   },
 };

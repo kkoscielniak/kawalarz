@@ -14,7 +14,7 @@ const aiHelper = require('../helpers/aiHelper');
 const { getRandomMessage } = require('../helpers/messagesHelper');
 
 const sendAGreeting = async senderId => {
-  const greeting = getRandomMessage(predefinedMessages.greetings) + getHappyEmoji();
+  const greeting = `${getRandomMessage(predefinedMessages.greetings)} ${getHappyEmoji()}`;
   sender.sendTypingIndicator(senderId);
   await sender.sendTextMessage(senderId, greeting);
 };
@@ -29,10 +29,16 @@ const sendAJoke = async senderId => {
   await sender.askAboutFeedback(senderId);
 };
 
-// const sendAbout = async senderId => {
-//   sender.sendTypingIndicator(senderId);
-//   await sender.sendTextMessage(senderId);
-// }
+const sendAbout = async senderId => {
+  const aboutMe = `
+    ${getRandomMessage(predefinedMessages.iAm)}, ${getRandomMessage(predefinedMessages.aboutMe)} ${getHappyEmoji()}
+  `;
+
+  console.log(aboutMe);
+
+  sender.sendTypingIndicator(senderId);
+  await sender.sendTextMessage(senderId, aboutMe);
+};
 
 router.get('/', (req, res) => {
   res.send('Hello world, I am a chat bot');
@@ -52,8 +58,6 @@ router.post('/webhook', async(req, res) => {
     const event = req.body.entry[0].messaging[i];
     const senderId = event.sender.id;
 
-    console.log(event);
-
     if (event.message && event.message.text) {
       const intent = await aiHelper.getIntent(event.message.text);
 
@@ -65,10 +69,10 @@ router.post('/webhook', async(req, res) => {
           await sendAJoke(senderId);
           break;
         case constants.INTENTS.ABOUT_YOU:
-          // @TODO
+          await sendAbout(senderId);
           break;
         default:
-          sender.sendTextMessage(senderId, getRandomMessage(predefinedMessages.didNotUnderstand));
+          sender.sendTextMessage(senderId, `${getRandomMessage(predefinedMessages.didNotUnderstand)} ${getSadEmoji()}`);
           break;
       }
     } else if (event.postback && event.postback.payload) {
