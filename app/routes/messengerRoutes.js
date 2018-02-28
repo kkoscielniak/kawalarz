@@ -6,12 +6,15 @@ const jokes = require('../model/jokes');
 const predefinedMessages = require('../model/predefinedMessages');
 
 const sender = require('../helpers/messengerSender');
-const emojiHelper = require('../helpers/emojiHelper');
+const {
+  getHappyEmoji,
+  getSadEmoji,
+} = require('../helpers/emojiHelper');
 const aiHelper = require('../helpers/aiHelper');
 const { getRandomMessage } = require('../helpers/messagesHelper');
 
 const sendAGreeting = async senderId => {
-  const greeting = getRandomMessage(predefinedMessages.greetings);
+  const greeting = getRandomMessage(predefinedMessages.greetings) + getHappyEmoji();
   sender.sendTypingIndicator(senderId);
   await sender.sendTextMessage(senderId, greeting);
 };
@@ -22,7 +25,7 @@ const sendAJoke = async senderId => {
   sender.sendTypingIndicator(senderId);
   await sender.sendTextMessage(senderId, joke.question);
   sender.sendTypingIndicator(senderId);
-  await sender.sendTextMessage(senderId, `${joke.answer} ${emojiHelper.getHappyEmoji()}`);
+  await sender.sendTextMessage(senderId, `${joke.answer} ${getHappyEmoji()}`);
   await sender.askAboutFeedback(senderId);
 };
 
@@ -49,6 +52,8 @@ router.post('/webhook', async(req, res) => {
     const event = req.body.entry[0].messaging[i];
     const senderId = event.sender.id;
 
+    console.log(event);
+
     if (event.message && event.message.text) {
       const intent = await aiHelper.getIntent(event.message.text);
 
@@ -63,7 +68,7 @@ router.post('/webhook', async(req, res) => {
           // @TODO
           break;
         default:
-          sender.sendTextMessage(senderId, constants.RESPONSES.DID_NOT_UNDERSTAND[0]);
+          sender.sendTextMessage(senderId, getRandomMessage(predefinedMessages.didNotUnderstand));
           break;
       }
     } else if (event.postback && event.postback.payload) {
@@ -72,13 +77,13 @@ router.post('/webhook', async(req, res) => {
           await sender.askAboutNewJoke(senderId);
           break;
         case constants.FEEDBACK.BAD:
-          await sender.sendTextMessage(senderId, emojiHelper.getSadEmoji());
+          await sender.sendTextMessage(senderId, getSadEmoji());
           break;
         case constants.FEEDBACK.NEXT:
           sendAJoke(senderId);
           break;
         case constants.FEEDBACK.STOP:
-          await sender.sendTextMessage(senderId, `Okej ${emojiHelper.getHappyEmoji()}`);
+          await sender.sendTextMessage(senderId, `Okej ${getHappyEmoji()}`);
           break;
       }
     }

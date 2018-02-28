@@ -14,9 +14,4 @@ module.exports = {
     GET_JOKE: 'get_joke',
     ABOUT_YOU: 'about_jou',
   },
-  RESPONSES: {
-    DID_NOT_UNDERSTAND: [
-      'Niestety nie rozumiem',
-    ],
-  },
 };

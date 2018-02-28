@@ -4,7 +4,10 @@ const delay = require('delay');
 const config = require('../config/config');
 const constants = require('../config/constants');
 const logger = require('../services/logger');
-const emojiHelper = require('../helpers/emojiHelper');
+const {
+  getHappyEmoji,
+  getSadEmoji,
+} = require('../helpers/emojiHelper');
 
 const requestParams = {
   method: 'POST',
@@ -74,11 +77,11 @@ const askAboutFeedback = async id => {
           title: 'Podoba Ci się?',
           buttons: [{
             type: 'postback',
-            title: `Dobre ${emojiHelper.getHappyEmoji()}`,
+            title: `Dobre ${getHappyEmoji()}`,
             payload: constants.FEEDBACK.GOOD,
           }, {
             type: 'postback',
-            title: `Słabe ${emojiHelper.getSadEmoji()}`,
+            title: `Słabe ${getSadEmoji()}`,
             payload: constants.FEEDBACK.BAD,
           }],
         }],
@@ -119,7 +122,7 @@ const askAboutNewJoke = async id => {
           title: 'Chcesz więcej?',
           buttons: [{
             type: 'postback',
-            title: `Jasne! ${emojiHelper.getHappyEmoji()}`,
+            title: `Jasne! ${getHappyEmoji()}`,
             payload: constants.FEEDBACK.NEXT,
           }, {
             type: 'postback',
