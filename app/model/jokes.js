@@ -127,4 +127,8 @@ module.exports = [
     question: 'Dlaczego prawdziwa miłosc przychodzi ze sklerozą?',
     answer: 'Bo tylko wtedy można zakochac się bez pamięci',
   },
+  {
+    question: 'Co to jest terapeuta?',
+    answer: 'Terapeuta to 1024 gigapeutów',
+  },
 ];

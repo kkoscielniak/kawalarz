@@ -34,8 +34,6 @@ const sendAbout = async senderId => {
     ${getRandomMessage(predefinedMessages.iAm)}, ${getRandomMessage(predefinedMessages.aboutMe)} ${getHappyEmoji()}
   `;
 
-  console.log(aboutMe);
-
   sender.sendTypingIndicator(senderId);
   await sender.sendTextMessage(senderId, aboutMe);
 };
